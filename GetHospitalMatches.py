@@ -34,5 +34,5 @@ print("combo", combo[0])
 
 with open('hosp_contain.txt', 'a') as writer:
     for hosp in combo:
-        writer.writelines(combo)
+        writer.write(hosp + "\n")
 print("written to hosp_contain.txt")
