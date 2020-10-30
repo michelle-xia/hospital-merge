@@ -133,3 +133,7 @@ dmypy.json
 *.csv
 *.xlsx
 pos_clia_csv_sep20/
+*.txt
+Merged.zip
+MyCount.py
+test.py
