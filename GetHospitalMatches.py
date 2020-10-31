@@ -5,9 +5,9 @@ from difflib import SequenceMatcher
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
-breachdf = pd.read_csv('breach_report.csv', encoding='latin1')
+breachdf = pd.read_csv('updated_breachdf2.csv', encoding='latin1')
 breachdf.rename(columns=lambda x: x.strip(), inplace=True)
-breachdf = breachdf.drop(columns=['Web Description'])
+#breachdf = breachdf.drop(columns=['Web Description'])
 print(breachdf.isnull().sum().sum(), "null columns")
 
 df = pd.read_csv('pos_clia_csv_sep20/pos_clia_sep20.csv', encoding='latin1')
@@ -19,7 +19,7 @@ combo = []
 df['FAC_NAME'] = df['FAC_NAME'].str.upper()
 for i in range(len(breachdf)):
     original = breachdf['FAC_NAME'][i]
-    tmp = df[df["FAC_NAME"].str.startswith(original.split()[0]|original.split()[1])]['FAC_NAME'].values.tolist()
+    tmp = df[df["FAC_NAME"].str.startswith(original.split()[0])]['FAC_NAME'].values.tolist()
     if tmp:
         sim = [similar(original, val) for val in tmp]
         maxtmp = max(sim)
