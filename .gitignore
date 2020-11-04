@@ -129,6 +129,7 @@ dmypy.json
 .pyre/
 
 # Misc
+.vscode/
 .DS_Store
 *.csv
 *.xlsx
