@@ -16,23 +16,19 @@ import statsmodels.api as sm
 
 df = pd.read_csv('TestData.csv', encoding = 'latin1')
 df.rename(columns=lambda x: x.strip(), inplace=True)
-#df = df.fillna(0)
 print(df.isnull().sum(), "null columns")
 print(df.columns)
 
+# Encode categorical columns
 onehot = pd.get_dummies(df)
 
-"""#columnsToEncode = list(df.select_dtypes(include=['category','object']))
-X = df.select_dtypes(include=[object])
-X = X.applymap(str)
-onehot = OneHotEncoder().fit_transform(X)"""
-#print(onehot)
 cols = onehot.columns
-#for col in cols:
-    #print(col)
-#print(onehot['Breach Occured_Yes'])
+
 onehot = onehot.fillna(0)
+
 x_col_names = []
+
+# split by X and Y
 for i in range(len(onehot.columns) - 1):
     x_col_names.append(onehot.columns[i])
 
@@ -40,48 +36,27 @@ x = onehot[x_col_names]
 
 y = onehot['Breach Occured_Yes']
 
-
+# Split data into test/train
 trainX, testX, trainy, testy = train_test_split(x, y, test_size=0.5, random_state=2)
 
+# Create model
 model = LogisticRegression(solver='lbfgs')
 model.fit(trainX, trainy)
 
-"""model2 = sm.Logit(trainy, trainX)
-result = model2.fit(method='newton')
-print(result.summary())"""
-
+# predict Y values from X values
 lr_probs = model.predict_proba(testX)
 
 # keep probabilities for the positive outcome only
 lr_probs = lr_probs[:, 1]
+
 # calculate scores
 lr_auc = roc_auc_score(testy, lr_probs)
 
 print('Logistic: ROC AUC=%.3f' % (lr_auc))
 
+# Plot false positive rate against true positive rate
 lr_fpr, lr_tpr, _ = roc_curve(testy, lr_probs)
 plt.plot(lr_fpr, lr_tpr, marker='.', label='Logistic')
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
-plt.show()
-
-"""#print(columnsToEncode)
-#encode_df = df[columnsToEncode].copy()
-le = preprocessing.LabelEncoder()
-X_2 = X.apply(le.fit_transform)
-
-enc = preprocessing.OneHotEncoder()
-
-# 2. FIT
-enc.fit(X_2)
-
-# 3. Transform
-onehotlabels = enc.transform(X_2).toarray()
-onehotlabels.shape
-print(onehotlabels)"""
-
-"""for col in columnsToEncode:
-    unique_vals = set()
-    for val in df[col]:
-        unique_vals.add(val)"""
-    
+plt.show()  
