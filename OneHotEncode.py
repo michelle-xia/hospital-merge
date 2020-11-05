@@ -46,9 +46,9 @@ trainX, testX, trainy, testy = train_test_split(x, y, test_size=0.5, random_stat
 model = LogisticRegression(solver='lbfgs')
 model.fit(trainX, trainy)
 
-model2 = sm.Logit(trainy, trainX)
+"""model2 = sm.Logit(trainy, trainX)
 result = model2.fit(method='newton')
-print(result.summary())
+print(result.summary())"""
 
 lr_probs = model.predict_proba(testX)
 
