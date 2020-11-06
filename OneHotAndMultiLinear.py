@@ -7,17 +7,21 @@ from sklearn import preprocessing
 from sklearn import linear_model
 from sklearn.datasets import make_classification
 from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegressionCV
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve
 from sklearn.metrics import roc_auc_score
 import matplotlib.pyplot as plt
 import numpy as np
 import statsmodels.api as sm
+import pprint
 
 df = pd.read_csv('TestData.csv', encoding = 'latin1')
 df.rename(columns=lambda x: x.strip(), inplace=True)
 print(df.isnull().sum(), "null columns")
 print(df.columns)
+
+pp = pprint.PrettyPrinter(indent=4)
 
 # Encode categorical columns
 onehot = pd.get_dummies(df)
@@ -40,11 +44,13 @@ y = onehot['Breach Occured_Yes']
 trainX, testX, trainy, testy = train_test_split(x, y, test_size=0.5, random_state=2)
 
 # Create model
-model = LogisticRegression(solver='lbfgs')
-model.fit(trainX, trainy)
+model = LogisticRegressionCV(solver='lbfgs', penalty='l2', multi_class='multinomial')
+result = model.fit(trainX, trainy)
+
+print("paramters", result.get_params)
 
 # predict Y values from X values
-lr_probs = model.predict_proba(testX)
+lr_probs = result.predict_proba(testX)
 
 # keep probabilities for the positive outcome only
 lr_probs = lr_probs[:, 1]
