@@ -47,7 +47,7 @@ trainX, testX, trainy, testy = train_test_split(x, y, test_size=0.5, random_stat
 model = LogisticRegressionCV(solver='lbfgs', penalty='l2', multi_class='multinomial')
 result = model.fit(trainX, trainy)
 
-print("paramters", result.get_params)
+print("paramters", result.get_params(deep=True))
 
 # predict Y values from X values
 lr_probs = result.predict_proba(testX)
