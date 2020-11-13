@@ -44,7 +44,7 @@ y = onehot['Breach Occured_Yes']
 trainX, testX, trainy, testy = train_test_split(x, y, test_size=0.5, random_state=2)
 
 # Create model
-model = LogisticRegressionCV(solver='lbfgs', penalty='l2', multi_class='multinomial')
+model = LogisticRegressionCV(solver='saga', max_iter=100, penalty='l1', multi_class='multinomial')
 result = model.fit(trainX, trainy)
 
 print("paramters", result.get_params(deep=True))
