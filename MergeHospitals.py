@@ -3,11 +3,11 @@ import numpy as np
 from difflib import SequenceMatcher
 
 # inputs:
-CMS_file_name = 'pos_clia_csv_sep20/pos_clia_sep20.csv'
-breach_file_name = 'breach_report.csv'
-matched_cms_txt = 'matching_cms_names.txt'
-updated_breach_file_name = 'updated_breach.csv'
-merged_file_name = 'MergedCMSWithBreaches.csv'
+CMS_file_name = 'POS_OTHER_CSV_SEP20/pos_other_sep20.csv'
+breach_file_name = 'breach_report_all.csv'
+matched_cms_txt = 'matching_cms_names_sep.txt'
+updated_breach_file_name = 'updated_breach_sep.csv'
+merged_file_name = 'MergedCMSWithBreachesSep.csv'
 
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
@@ -33,7 +33,7 @@ def find_matches():
     for i in range(len(breachdf)):
         original = breachdf['FAC_NAME'][i]
         # ".startswith" can also be changed to ".contains" but will give less matched rows
-        tmp = df[df["FAC_NAME"].str.startswith(original.split()[0])]['FAC_NAME'].values.tolist()
+        tmp = df[df["FAC_NAME"].str.contains(original.split()[0])]['FAC_NAME'].values.tolist()
         # find the most similar hospital
         if tmp:
             sim = [similar(original, val) for val in tmp]
